@@ -57,7 +57,7 @@ A classic ASP.NET template endpoint:
 /weatherforecast
 ```
 📁 Project Structure
-pgsql
+```pgsql
 
 AzureAIChatApi/
  ├── Program.cs
@@ -66,6 +66,7 @@ AzureAIChatApi/
  ├── AzureAIChatApi.http           # REST client samples
  ├── .gitignore
  └── README.md
+```
 🔧 Requirements
 .NET 8 SDK
 
@@ -79,7 +80,6 @@ cp appsettings.example.json appsettings.json
 ```
 2. Insert your Azure OpenAI values
 ```json
-
 "AzureAI": {
   "Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
   "Key": "YOUR-KEY",
@@ -94,11 +94,10 @@ dotnet run
 ```
 💬 Using the /chat endpoint
 Request
-```json
 
 POST /chat
 Content-Type: application/json
-
+```json
 {
   "message": "Hello AI!"
 }
