@@ -26,6 +26,7 @@ If Azure credentials are missing, the API returns safe mocked responses:
 {
   "reply": "(local dummy): Received: 'hello'. Configure AzureAI to enable real model responses."
 }
+```
 Useful for:
 
 running without Azure access
@@ -37,9 +38,10 @@ local development
 ✔ Swagger UI included
 Interactive API docs available at:
 
-bash
-Skopiuj kod
+```bash
+
 https://localhost:{port}/swagger
+```
 ✔ Safe configuration (no secrets in repo)
 appsettings.example.json is included
 
@@ -50,12 +52,13 @@ users insert their own Azure keys locally
 ✔ Additional sample endpoint
 A classic ASP.NET template endpoint:
 
-bash
-Skopiuj kod
+```bash
+
 /weatherforecast
+```
 📁 Project Structure
 pgsql
-Skopiuj kod
+
 AzureAIChatApi/
  ├── Program.cs
  ├── appsettings.json              # ignored (local secrets)
@@ -70,43 +73,50 @@ Azure OpenAI resource (optional — required only for real AI responses)
 
 🛠 Configuration
 1. Copy the example config
-bash
-Skopiuj kod
+```bash
+
 cp appsettings.example.json appsettings.json
+```
 2. Insert your Azure OpenAI values
-json
-Skopiuj kod
+```json
+
 "AzureAI": {
   "Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
   "Key": "YOUR-KEY",
   "DeploymentName": "gpt-4o-mini"
 }
+```
 3. Run the API
-bash
-Skopiuj kod
+
+```bash
+
 dotnet run
+```
 💬 Using the /chat endpoint
 Request
-json
-Skopiuj kod
+```json
+
 POST /chat
 Content-Type: application/json
 
 {
   "message": "Hello AI!"
 }
+```
 Response (Azure OpenAI enabled)
-json
-Skopiuj kod
+```json
+
 {
   "reply": "Cześć! Jak mogę Ci pomóc?"
 }
+```
 Response (dummy mode)
-json
-Skopiuj kod
+```json
+
 {
   "reply": "(local dummy): Received: 'Hello AI!'. Configure AzureAI to enable real model responses."
 }
+```
 🧠 Technologies Used
 ASP.NET Core 8 Minimal API
 
