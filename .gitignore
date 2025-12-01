@@ -1,0 +1,26 @@
+﻿# Ignorowanie folderów build
+bin/
+obj/
+
+# Ignorowanie plików ustawień użytkownika
+*.user
+*.suo
+
+# Ignorowanie plików środowiskowych i kluczy
+appsettings.Development.json
+appsettings.Local.json
+appsettings.json
+*.env
+
+# Ignorowanie backupów
+*.bak
+*.tmp
+
+# Ignorowanie plików logów
+*.log
+
+# Ignorowanie folderów VS
+.vs/
+
+# Ignorowanie własnych sekretów
+secrets.json
