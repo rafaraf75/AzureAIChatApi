@@ -1,88 +1,119 @@
-Azure AI Chat API (ASP.NET Core)
+# Azure AI Chat API (ASP.NET Core 8)
 
-This project is a minimal ASP.NET Core Web API that connects to Azure OpenAI (or works in local “dummy mode” if no keys are configured).
-It exposes a simple /chat endpoint you can use to send messages to an LLM model.
+A minimal ASP.NET Core 8 Web API that integrates with **Azure OpenAI** to provide a `/chat` endpoint.  
+If Azure credentials are not configured, the API automatically falls back to a safe **local dummy AI mode**.
 
-🚀 Features
+This project is ideal as a starter template for AI-driven backend services or for demonstrating Azure OpenAI integration in recruitment processes.
 
-Minimal API (ASP.NET Core 8)
+---
 
-/chat endpoint with Azure OpenAI support
+## 🚀 Features
 
-Automatic fallback to “local dummy AI” if no Azure credentials are provided
+### ✔ Minimal API (ASP.NET Core 8)
+Built entirely using the lightweight minimal API style.
 
-/weatherforecast example endpoint (default template)
+### ✔ `/chat` endpoint with Azure OpenAI support
+Sends user messages to an Azure-hosted LLM deployment  
+(e.g., `gpt-4o-mini`, `gpt-4o`, `gpt-35-turbo`).
 
-Swagger UI included
+### ✔ Automatic “dummy mode”
+If Azure credentials are missing in *appsettings.json*, the API returns safe mock responses:
 
-Safe configuration using appsettings.example.json
-
-.gitignore included to avoid leaking secrets
-
-📦 Requirements
-
-.NET 8 SDK
-
-Azure OpenAI (optional — required for real AI responses)
-
-Valid model deployment (e.g. gpt-4o-mini, gpt-4o, etc.)
-
-🔧 Configuration
-
-Copy the example configuration:
-
-appsettings.example.json  →  appsettings.json
-
-
-Fill in your Azure credentials:
 
 {
-  "AzureAI": {
-    "Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
-    "Key": "YOUR_API_KEY",
-    "DeploymentName": "YOUR_MODEL"
-  }
+  "reply": "(local dummy): Received: \"hello\". Configure AzureAI to enable real model responses."
 }
 
+Useful for:
 
-If you leave these fields empty, API will run in dummy local mode.
+running the app without Azure access
 
-▶️ Running the API
-dotnet run
+demos
 
+local development
 
-Then open Swagger:
+✔ Swagger UI included
+Interactive API documentation available immediately at:
 
-https://localhost:7003/swagger
+https://localhost:<port>/swagger
+✔ Safe configuration (no secrets in repo)
+appsettings.example.json is provided
 
-💬 Chat Endpoint
-Request
+actual appsettings.json is secured via .gitignore
 
-POST /chat
+users must insert their own Azure keys locally
 
-{
-  "message": "Hello!"
-}
-
-Response (Azure mode)
-{
-  "reply": "Hello, how can I help you today?"
-}
-
-Response (local dummy mode)
-{
-  "reply": "(local dummy): Otrzymałem: \"Hello!\". Skonfiguruj AzureAI w appsettings.json."
-}
+✔ Additional sample endpoint
+A classic /weatherforecast endpoint from the ASP.NET template.
 
 📁 Project Structure
-/AzureAIChatApi
-  Program.cs
-  appsettings.json (ignored)
-  appsettings.example.json
-  .gitignore
-  AzureAIChatApi.http
-  README.md
 
-📜 License
+AzureAIChatApi/
+ ├── Program.cs
+ ├── appsettings.json (ignored)
+ ├── appsettings.example.json
+ ├── AzureAIChatApi.http
+ ├── .gitignore
+ └── README.md
+🔧 Requirements
+.NET 8 SDK
 
-If you find this useful, leave a ⭐ on the repository!
+Azure OpenAI resource (optional; needed for real AI responses)
+
+🛠 Configuration
+1. Copy the example config
+
+cp appsettings.example.json appsettings.json
+
+2. Insert your Azure OpenAI values
+
+"AzureAI": {
+  "Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
+  "Key": "YOUR-KEY",
+  "DeploymentName": "gpt-4o-mini"
+}
+
+3. Run the API
+
+dotnet run
+
+💬 Using the /chat endpoint
+Request:
+
+POST /chat
+Content-Type: application/json
+
+{
+  "message": "Hello AI!"
+}
+Response (with Azure OpenAI):
+
+{
+  "reply": "Cześć! Jak mogę Ci pomóc?"
+}
+Response (dummy mode):
+
+{
+  "reply": "(local dummy): Received: \"Hello AI!\". Configure AzureAI to enable real model responses."
+}
+
+🧠 Technologies Used
+ASP.NET Core 8 Minimal API
+
+Azure OpenAI (via Azure.AI.OpenAI NuGet package)
+
+Swagger / OpenAPI
+
+📌 Purpose of the Project
+This repository serves as a clean, secure, and well-structured example of:
+
+integrating Azure OpenAI with .NET
+
+building minimal APIs
+
+safe secret management
+
+creating a developer-friendly API with documentation
+
+Perfect for recruitment, portfolios, or as a boilerplate for AI backend development.
+
