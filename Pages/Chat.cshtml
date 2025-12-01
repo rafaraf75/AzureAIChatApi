@@ -1,0 +1,61 @@
+﻿@page "/Chat"
+@model AzureAIChatApi.Pages.ChatModel
+@{
+    ViewData["Title"] = "Azure AI Chat";
+}
+
+<h2>Azure AI Chat</h2>
+<p>Simple chat UI that talks to the <code>/chat</code> endpoint.</p>
+
+<div>
+    <label for="message">Your message:</label><br />
+    <textarea id="message"></textarea><br />
+    <button id="sendBtn" type="button">Send</button>
+</div>
+
+<h3>Reply</h3>
+<pre id="reply">(waiting for message...)</pre>
+
+@section Scripts {
+    <script>
+        const messageInput = document.getElementById("message");
+        const replyBox = document.getElementById("reply");
+        const sendBtn = document.getElementById("sendBtn");
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            replyBox.textContent = "Sending...";
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+
+                if (!response.ok) {
+                    replyBox.textContent = "Error: " + response.status + " " + response.statusText;
+                    return;
+                }
+
+                const data = await response.json();
+                replyBox.textContent = data.reply ?? "(no reply)";
+            } catch (err) {
+                replyBox.textContent = "Request failed: " + err;
+            }
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+
+        messageInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                sendMessage();
+                e.preventDefault();
+            }
+        });
+    </script>
+}

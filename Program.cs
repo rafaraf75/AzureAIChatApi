@@ -5,6 +5,9 @@ using OpenAI.Chat;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Razor Pages (widoki)
+builder.Services.AddRazorPages();
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,13 +23,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// statyczne pliki (css/js, layout itp.)
+app.UseStaticFiles();
+
+app.UseRouting();
+
+// ===== RAZOR PAGES (Chat.cshtml) =====
+app.MapRazorPages();
+
+// ===== STARY ENDPOINT /weatherforecast ñ zostawiamy =====
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild",
     "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-// ===== STARY ENDPOINT /weatherforecast ñ zostawiamy =====
 app.MapGet("/weatherforecast", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
@@ -43,7 +54,6 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 // ===== KONFIGURACJA AZURE AI Z appsettings.json =====
-
 var azureSection = app.Configuration.GetSection("AzureAI");
 var endpoint = azureSection["Endpoint"];
 var apiKey = azureSection["Key"];
@@ -55,19 +65,14 @@ if (!string.IsNullOrWhiteSpace(endpoint) &&
     !string.IsNullOrWhiteSpace(apiKey) &&
     !string.IsNullOrWhiteSpace(deploymentName))
 {
-    // klient do Azure OpenAI
     var credential = new AzureKeyCredential(apiKey);
     var azureClient = new AzureOpenAIClient(new Uri(endpoint), credential);
-
-    // klient czatu dla konkretnego deploymentu (np. "gpt-4o-mini")
     chatClient = azureClient.GetChatClient(deploymentName);
 }
 
 // ===== NOWY ENDPOINT /chat =====
-
 app.MapPost("/chat", async Task<IResult> (ChatRequest request) =>
 {
-    // Brak konfiguracji Azure ñ zwracamy Ñdummyî odpowiedü
     if (chatClient is null)
     {
         var dummy = $"(local dummy): Otrzyma≥em: \"{request.Message}\". " +
@@ -92,7 +97,6 @@ app.MapPost("/chat", async Task<IResult> (ChatRequest request) =>
 app.Run();
 
 // ===== TYPY POMOCNICZE =====
-
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
