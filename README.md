@@ -10,16 +10,17 @@ This project is ideal as a starter template for AI-driven backend services or as
 ## 🚀 Features
 
 ### ✔ Minimal API (ASP.NET Core 8)
-Lightweight and clean architecture with no controllers.
+Lightweight architecture with no controllers — clean, modern, and easy to extend.
 
 ### ✔ `/chat` endpoint with Azure OpenAI support
 Sends user messages to an Azure-hosted LLM deployment such as:
+
 - `gpt-4o-mini`
 - `gpt-4o`
 - `gpt-35-turbo`
 
-### ✔ Automatic "dummy mode"
-When Azure credentials are missing, the API returns a safe mocked response:
+### ✔ Automatic “dummy mode”
+If Azure credentials are missing, the API returns safe mocked responses:
 
 ```json
 {
@@ -27,45 +28,48 @@ When Azure credentials are missing, the API returns a safe mocked response:
 }
 Useful for:
 
-running the app without Azure access
+running without Azure access
 
-demos & interviews
+demos / interviews
 
 local development
 
 ✔ Swagger UI included
-Interactive documentation available at:
+Interactive API docs available at:
 
 bash
 Skopiuj kod
 https://localhost:{port}/swagger
-✔ Safe configuration (no secrets committed)
-appsettings.example.json included
+✔ Safe configuration (no secrets in repo)
+appsettings.example.json is included
 
 real appsettings.json is ignored via .gitignore
 
-users add their own Azure keys locally
+users insert their own Azure keys locally
 
 ✔ Additional sample endpoint
-Classic /weatherforecast endpoint from the ASP.NET template.
+A classic ASP.NET template endpoint:
 
+bash
+Skopiuj kod
+/weatherforecast
 📁 Project Structure
 pgsql
 Skopiuj kod
 AzureAIChatApi/
-├── Program.cs
-├── appsettings.json            # ignored (local secrets)
-├── appsettings.example.json    # template
-├── AzureAIChatApi.http         # REST client samples
-├── .gitignore
-└── README.md
+ ├── Program.cs
+ ├── appsettings.json              # ignored (local secrets)
+ ├── appsettings.example.json      # template for users
+ ├── AzureAIChatApi.http           # REST client samples
+ ├── .gitignore
+ └── README.md
 🔧 Requirements
 .NET 8 SDK
 
-Azure OpenAI resource (optional — required only for real model responses)
+Azure OpenAI resource (optional — required only for real AI responses)
 
 🛠 Configuration
-1. Copy example configuration
+1. Copy the example config
 bash
 Skopiuj kod
 cp appsettings.example.json appsettings.json
@@ -83,7 +87,7 @@ Skopiuj kod
 dotnet run
 💬 Using the /chat endpoint
 Request
-bash
+json
 Skopiuj kod
 POST /chat
 Content-Type: application/json
@@ -113,18 +117,18 @@ Swagger / OpenAPI
 📌 Purpose of the Project
 This repository demonstrates:
 
-secure and clean integration with Azure OpenAI
+clean and secure integration with Azure OpenAI
 
 modern minimal API architecture
 
-safe secret handling with .gitignore
+safe secret handling using .gitignore
 
-developer-friendly design with Swagger documentation
+developer-friendly design with Swagger
 
 Perfect for:
 
-recruitment tasks
+✔ recruitment tasks
 
-portfolio projects
+✔ portfolio projects
 
-AI backend boilerplates
+✔ boilerplate for AI-enabled backend services
