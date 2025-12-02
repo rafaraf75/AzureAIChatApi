@@ -1,143 +1,185 @@
-# Azure AI Chat API (ASP.NET Core 8)
+Azure AI Chat API (ASP.NET Core 8)
 
-A minimal ASP.NET Core 8 Web API that integrates with **Azure OpenAI** to provide a `/chat` endpoint.  
-If Azure credentials are not configured, the API automatically falls back to a safe **local dummy AI mode**.
+A minimal and production-style ASP.NET Core 8 Web API with an optional Azure OpenAI integration and a built-in Razor Pages UI.
+The /chat endpoint works with real Azure OpenAI deployments — and automatically falls back to a safe local dummy mode when no Azure credentials are provided.
 
-This project is ideal as a starter template for AI-driven backend services or as part of a **recruitment portfolio**.
+Perfect as a portfolio project, coding sample, or a starter template for AI-powered backend services.
 
----
+🚀 Features
+✔ Minimal API (ASP.NET Core 8)
 
-## 🚀 Features
+Lightweight modern architecture — no controllers, clean routing, easy to extend.
 
-### ✔ Minimal API (ASP.NET Core 8)
-Lightweight architecture with no controllers — clean, modern, and easy to extend.
+✔ /chat endpoint with Azure OpenAI support
 
-### ✔ `/chat` endpoint with Azure OpenAI support
-Sends user messages to an Azure-hosted LLM deployment such as:
+Works with any Azure OpenAI chat model, such as:
 
-- `gpt-4o-mini`
-- `gpt-4o`
-- `gpt-35-turbo`
+gpt-4o-mini
 
-### ✔ Automatic “dummy mode”
-If Azure credentials are missing, the API returns safe mocked responses:
+gpt-4o
 
-```json
+gpt-35-turbo
+
+✔ Automatic “Dummy Mode” (no Azure required)
+
+If Azure credentials are missing, the API switches to a local mock mode:
+
 {
   "reply": "(local dummy): Received: 'hello'. Configure AzureAI to enable real model responses."
 }
-```
-Useful for:
+
+
+This allows:
 
 running without Azure access
 
-demos / interviews
+demos during interviews
 
-local development
+safe local development
+
+letting recruiters run the project instantly
+
+✔ Built-in Razor Pages Chat UI
+
+A lightweight, modern UI for interacting with the /chat endpoint:
+
+HTML + CSS + vanilla JS
+
+clean enterprise-style layout
+
+auto-scrolling output
+
+Enter to send, Ctrl/Cmd+Enter for newline
+
+clearly shows dummy mode vs real Azure mode
 
 ✔ Swagger UI included
+
 Interactive API docs available at:
 
-```bash
-
 https://localhost:{port}/swagger
-```
-✔ Safe configuration (no secrets in repo)
-appsettings.example.json is included
 
-real appsettings.json is ignored via .gitignore
+✔ Safe configuration (no secrets committed)
 
-users insert their own Azure keys locally
+appsettings.example.json shows required structure
+
+real appsettings.json is .gitignored
+
+Azure keys stay on your machine only
 
 ✔ Additional sample endpoint
-A classic ASP.NET template endpoint:
 
-```bash
+Default ASP.NET Core template endpoint:
 
 /weatherforecast
-```
-📁 Project Structure
-```pgsql
 
+📁 Project Structure
 AzureAIChatApi/
  ├── Program.cs
- ├── appsettings.json              # ignored (local secrets)
- ├── appsettings.example.json      # template for users
- ├── AzureAIChatApi.http           # REST client samples
+ ├── Pages/                    # Razor Pages UI
+ │     ├── Chat.cshtml         # Chat console UI
+ │     └── _Layout.cshtml      # Shared layout
+ ├── appsettings.json          # local-only (ignored)
+ ├── appsettings.example.json  # sample config
+ ├── AzureAIChatApi.http       # REST client samples
  ├── .gitignore
  └── README.md
-```
+
 🔧 Requirements
+
 .NET 8 SDK
 
-Azure OpenAI resource (optional — required only for real AI responses)
+(Optional) Azure OpenAI resource for real model responses
 
 🛠 Configuration
-1. Copy the example config
-```bash
-
+1. Create a local config
 cp appsettings.example.json appsettings.json
-```
+
 2. Insert your Azure OpenAI values
-```json
 "AzureAI": {
   "Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
   "Key": "YOUR-KEY",
   "DeploymentName": "gpt-4o-mini"
 }
-```
+
 3. Run the API
-
-```bash
-
 dotnet run
-```
+
 💬 Using the /chat endpoint
 Request
-
 POST /chat
 Content-Type: application/json
-```json
+
 {
   "message": "Hello AI!"
 }
-```
-Response (Azure OpenAI enabled)
-```json
 
+Response (Azure OpenAI enabled)
 {
   "reply": "Cześć! Jak mogę Ci pomóc?"
 }
-```
-Response (dummy mode)
-```json
 
+Response (dummy mode)
 {
   "reply": "(local dummy): Received: 'Hello AI!'. Configure AzureAI to enable real model responses."
 }
-```
-🧠 Technologies Used
-ASP.NET Core 8 Minimal API
 
-Azure OpenAI (Azure.AI.OpenAI SDK)
+🖥️ Chat UI (Razor Pages)
+
+This project includes a ready-to-use browser UI:
+
+Fully client-side (HTML/CSS/JS)
+
+Styled, minimalistic, developer-friendly console
+
+Works in both Azure and dummy modes
+
+Great for demos and recruiter testing
+
+Open it at:
+
+https://localhost:{port}/chat
+
+🧠 Technologies Used
+
+ASP.NET Core 8 (Minimal API)
+
+Razor Pages (UI)
+
+Azure.AI.OpenAI SDK
 
 Swagger / OpenAPI
 
-📌 Purpose of the Project
+C# / .NET 8
+
+📌 Purpose of This Project
+
 This repository demonstrates:
 
-clean and secure integration with Azure OpenAI
+clean Azure OpenAI integration
 
-modern minimal API architecture
+secure configuration & secret management
 
-safe secret handling using .gitignore
+modern .NET 8 minimal API patterns
 
-developer-friendly design with Swagger
+a complete pipeline: API → AI model → UI
 
-Perfect for:
+dummy fallback for easy demos
 
-✔ recruitment tasks
+portfolio-grade project structure
 
-✔ portfolio projects
+Recommended for:
 
-✔ boilerplate for AI-enabled backend services
+✔ Azure AI / LLM Developer roles
+
+✔ AI Integration / AI Engineer roles
+
+✔ .NET + AI job interviews
+
+✔ Portfolio and GitHub presence
+
+✔ Prototyping conversational AI backends
+
+🎯 Summary
+
+This template gives you a ready-to-use AI backend with both local and Azure-powered modes, a clean web UI, and a professional architecture suitable for real-world work or recruitment.
