@@ -75,6 +75,9 @@ Default ASP.NET Core template endpoint:
 ```text
 /weatherforecast
 ```
+##Screenshot
+<img width="1829" height="1167" alt="image" src="https://github.com/user-attachments/assets/cf838878-e044-4886-804d-f613b81f930b" />
+
 📁 Project Structure
 ```text
 AzureAIChatApi/
