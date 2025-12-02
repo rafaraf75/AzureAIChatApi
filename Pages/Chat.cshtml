@@ -4,29 +4,86 @@
     ViewData["Title"] = "Azure AI Chat";
 }
 
-<h2>Azure AI Chat</h2>
-<p>Simple chat UI that talks to the <code>/chat</code> endpoint.</p>
+<section>
+    <h2 class="page-title">Azure AI Chat</h2>
+    <p class="page-subtitle">
+        Simple chat UI that talks to the <code>/chat</code> endpoint.
+    </p>
 
-<div>
-    <label for="message">Your message:</label><br />
-    <textarea id="message"></textarea><br />
-    <button id="sendBtn" type="button">Send</button>
-</div>
+    <div class="chat-layout">
+        <div class="chat-panel">
+            <div class="chat-panel-header">
+                <div>
+                    <h2>Chat console</h2>
+                    <p>Send a message to the API and inspect the response.</p>
+                </div>
+                <div>
+                    <span class="mode-pill-small">
+                        <span class="mode-pill-dot"></span>
+                        <span>Mode: Azure or dummy (backend decides)</span>
+                    </span>
+                </div>
+            </div>
 
-<h3>Reply</h3>
-<pre id="reply">(waiting for message...)</pre>
+            <div class="chat-input-block">
+                <label for="message">
+                    Your message
+                    <span class="chat-input-hint">Enter to send · Ctrl/⌘+Enter also works</span>
+                </label>
+
+                <textarea id="message"></textarea>
+
+                <div class="chat-actions">
+                    <div id="status" class="status-text">Idle</div>
+                    <button id="sendBtn" type="button">Send</button>
+                </div>
+            </div>
+
+            <div class="reply-block">
+                <h3>Reply</h3>
+                <pre id="reply">(waiting for message...)</pre>
+            </div>
+        </div>
+
+        <aside class="side-panel">
+            <div class="side-card">
+                <h3>What this demo shows</h3>
+                <ul>
+                    <li>ASP.NET Core 8 Minimal API backend</li>
+                    <li>Endpoint <code>/chat</code> for Azure OpenAI</li>
+                    <li>Local "dummy" AI when keys are missing</li>
+                    <li>Razor Pages UI connected via fetch()</li>
+                </ul>
+            </div>
+
+            <div class="side-card">
+                <h3>Request / response shape</h3>
+                <p>Each message is sent as JSON:</p>
+<pre>{
+  "message": "Hello"
+}</pre>
+                <p>API replies with:</p>
+<pre>{
+  "reply": "..."
+}</pre>
+            </div>
+        </aside>
+    </div>
+</section>
 
 @section Scripts {
     <script>
         const messageInput = document.getElementById("message");
         const replyBox = document.getElementById("reply");
         const sendBtn = document.getElementById("sendBtn");
+        const status = document.getElementById("status");
 
         async function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
 
             replyBox.textContent = "Sending...";
+            status.textContent = "Calling /chat...";
 
             try {
                 const response = await fetch("/chat", {
@@ -39,22 +96,30 @@
 
                 if (!response.ok) {
                     replyBox.textContent = "Error: " + response.status + " " + response.statusText;
+                    status.textContent = "Error from API.";
                     return;
                 }
 
                 const data = await response.json();
                 replyBox.textContent = data.reply ?? "(no reply)";
+                status.textContent = "Response received.";
             } catch (err) {
                 replyBox.textContent = "Request failed: " + err;
+                status.textContent = "Request failed.";
             }
         }
 
         sendBtn.addEventListener("click", sendMessage);
 
         messageInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-                sendMessage();
+            // Enter (bez shift) wysyła, Ctrl/⌘+Enter też działa jak wcześniej
+            if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
                 e.preventDefault();
+                sendMessage();
+            }
+            else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                sendMessage();
             }
         });
     </script>

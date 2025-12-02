@@ -3,41 +3,416 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - Azure AI Chat</title>
+
     <style>
+        :root {
+            --bg: #020617;
+            --bg-elevated: #020617;
+            --panel: #020617;
+            --panel-border: #1f2937;
+            --accent: #38bdf8;
+            --accent-soft: rgba(56, 189, 248, 0.15);
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --shadow-strong: 0 22px 45px rgba(15, 23, 42, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            margin: 2rem;
-            background: #0f172a;
-            color: #e5e7eb;
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%), radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.08), transparent 55%), var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            margin-bottom: 2rem;
+            border-bottom: 1px solid #020617;
+            padding: 1rem 0;
+            backdrop-filter: blur(14px);
         }
 
-            header h1 {
-                margin: 0;
-                font-size: 2rem;
-            }
+        .shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 0.9rem;
+            background: radial-gradient(circle at 30% 0, rgba(248, 250, 252, 0.7), transparent 55%), linear-gradient(135deg, #0ea5e9, #22c55e);
+            box-shadow: 0 0 0 1px #020617, 0 16px 35px rgba(15, 23, 42, 0.95);
+        }
+
+        .brand-text-main {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .brand-text-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .pill {
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background-color: rgba(15, 23, 42, 0.9);
+        }
+
+        .pill-primary {
+            border-color: rgba(56, 189, 248, 0.7);
+            background-color: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 0, #f9fafb, #22c55e);
+        }
 
         main {
-            max-width: 960px;
+            flex: 1;
+            padding: 2rem 0 2.5rem;
         }
 
+        footer {
+            border-top: 1px solid #020617;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 0.8rem 0 1.1rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-meta {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+            .footer-meta span::before {
+                content: "•";
+                margin-right: 0.35rem;
+                opacity: 0.4;
+            }
+
+            .footer-meta span:first-child::before {
+                content: "";
+                margin: 0;
+            }
+
         a {
-            color: #38bdf8;
+            color: var(--accent);
+        }
+
+        /* --- Chat specific layout --- */
+
+        .page-title {
+            margin: 0 0 0.4rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            margin: 0 0 1.4rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .chat-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.3fr);
+            gap: 1.5rem;
+        }
+
+        .chat-panel {
+            background-color: var(--panel);
+            border-radius: 1.2rem;
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow-strong);
+            padding: 1.2rem 1.3rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+            .chat-panel header {
+                padding: 0;
+                border: none;
+                backdrop-filter: none;
+            }
+
+        .chat-panel-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            align-items: flex-start;
+            margin-bottom: 0.6rem;
+        }
+
+            .chat-panel-header h2 {
+                margin: 0;
+                font-size: 1.1rem;
+            }
+
+            .chat-panel-header p {
+                margin: 0.25rem 0 0;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+
+        .mode-pill-small {
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background-color: rgba(15, 23, 42, 0.95);
+        }
+
+        .mode-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background-color: var(--accent);
+        }
+
+        .chat-input-block label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .chat-input-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        #message {
+            width: 100%;
+            min-height: 80px;
+            max-height: 160px;
+            resize: vertical;
+            border-radius: 0.7rem;
+            border: 1px solid var(--panel-border);
+            padding: 0.7rem 0.75rem;
+            background-color: #020617;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+            #message:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+            }
+
+        .chat-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.4rem;
+            gap: 0.75rem;
+        }
+
+        .status-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        #sendBtn {
+            border-radius: 999px;
+            border: none;
+            padding: 0.45rem 1.1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: linear-gradient(135deg, #0ea5e9, #22c55e);
+            color: #020617;
+            box-shadow: var(--shadow-strong);
+        }
+
+            #sendBtn:disabled {
+                opacity: 0.6;
+                cursor: default;
+                box-shadow: none;
+            }
+
+        .reply-block {
+            margin-top: 0.8rem;
+        }
+
+            .reply-block h3 {
+                margin: 0 0 0.35rem;
+                font-size: 0.9rem;
+            }
+
+        #reply {
+            margin: 0;
+            padding: 0.7rem 0.8rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--panel-border);
+            background-color: #020617;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            min-height: 80px;
+            white-space: pre-wrap;
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .side-card {
+            background-color: rgba(15, 23, 42, 0.96);
+            border-radius: 1rem;
+            border: 1px solid var(--panel-border);
+            padding: 1rem 1.1rem 0.9rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+            .side-card h3 {
+                margin: 0 0 0.4rem;
+                font-size: 0.95rem;
+                color: var(--text-main);
+            }
+
+            .side-card ul {
+                margin: 0.2rem 0 0;
+                padding-left: 1.1rem;
+            }
+
+            .side-card li {
+                margin-bottom: 0.25rem;
+            }
+
+            .side-card pre {
+                margin: 0.5rem 0 0;
+                padding: 0.55rem 0.7rem;
+                border-radius: 0.7rem;
+                border: 1px solid var(--panel-border);
+                background-color: #020617;
+                font-size: 0.78rem;
+                overflow-x: auto;
+            }
+
+        @@media (max-width: 900px) {
+            .chat-layout
+
+        {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        }
+
+        @@media (max-width: 640px) {
+            .shell
+
+        {
+            padding: 0 1.1rem;
+        }
+
+        header {
+            padding-inline: 1.1rem;
+        }
+
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Azure AI Chat API</h1>
-        <p>Minimal ASP.NET Core 8 API + Razor UI</p>
+        <div class="shell">
+            <div class="header-inner">
+                <div class="brand">
+                    <div class="brand-icon"></div>
+                    <div>
+                        <div class="brand-text-main">Azure AI Chat API</div>
+                        <div class="brand-text-sub">Minimal ASP.NET Core 8 API + Razor UI</div>
+                    </div>
+                </div>
+                <div class="header-badges">
+                    <div class="pill pill-primary">
+                        <span class="pill-dot"></span>
+                        <span>AI backend ready</span>
+                    </div>
+                    <div class="pill">Minimal API</div>
+                    <div class="pill">Azure OpenAI capable</div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main>
-        @RenderBody()
+        <div class="shell">
+            @RenderBody()
+        </div>
     </main>
+
+    <footer>
+        <div class="shell footer-inner">
+            <div>Sample console wired to the <code>/chat</code> endpoint.</div>
+            <div class="footer-meta">
+                <span>Dummy mode when Azure keys are missing</span>
+                <span>Config via <code>appsettings.example.json</code></span>
+            </div>
+        </div>
+    </footer>
 
     @RenderSection("Scripts", required: false)
 </body>
